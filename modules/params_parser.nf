@@ -7,6 +7,7 @@ def default_params(){
     params.help = false
     params.version = false
     params.reads = false
+    params.confindr_db_path = false
     params.output_dir = false
     return params
 }

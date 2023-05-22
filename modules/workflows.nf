@@ -1,14 +1,21 @@
-include { FASTQC; MULTIQC } from '../modules/processes.nf' 
+include { FASTP; FASTQC; MULTIQC; CONTAMINATION_CHECK } from '../modules/processes.nf' 
 
 workflow QC {
     take:
         reads_ch
+    take: 
+        confindr_db_path
 
     main: 
-        FASTQC(reads_ch)
+        // reads_ch.view()
+        FASTP(reads_ch)
+
+        FASTQC(FASTP.out.trimmed_fastqs)
 
         MULTIQC(FASTQC.out.fastqc_directories.collect())
 
+        CONTAMINATION_CHECK(FASTP.out.trimmed_fastqs, confindr_db_path)
+
     emit:
-        FASTQC.out.fastqc_directories.collect()
+        MULTIQC.out
 }

@@ -2,10 +2,13 @@ def help_message() {
   log.info """
         Usage:
         The typical command for running the pipeline is as follows:
-        nextflow run main.nf --reads "path_to_reads/*_{1,2}*.gz" --output_dir <output_dir>  
+        nextflow run main.nf --reads "path_to_reads/*_{1,2}*.gz" --output_dir <output_dir> --confindr_db_path <confindr_db_path>
+
         Mandatory arguments:
-         --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/MIGE/01_DATA/01_FASTQ/T055-8-*.fastq.gz")
-         --output_dir                   Output directory to place output files (e.g., "/MIGE/01_DATA/03_ASSEMBLY")
+         --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/data/*{R,_}{1,2}.fastq.gz")
+         --output_dir                   Output directory to place output files 
+         --confindr_db_path             Path to downloaded confindr database dir
+
         Optional arguments:
          --help                         This usage statement
          --version                      Version statement
@@ -28,7 +31,6 @@ def pipeline_start_message(String version, Map params){
     log.info " readQC pipeline - Assess quality of raw reads: ${version}"
     log.info "=========================================================================================="
     log.info "Running version   : ${version}"
-    log.info "Fastq inputs      : ${params.reads}"
     log.info ""
     log.info "-------------------------- Other parameters ----------------------------------------------"
     params.sort{ it.key }.each{ k, v ->

@@ -25,8 +25,12 @@ workflow {
     reads_ch = Channel
         .fromFilePairs( final_params.reads, checkIfExists: true )
         .ifEmpty { error "Cannot find any reads matching: ${final_params.reads}" }
-    
-    QC(reads_ch)
+    confindr_db_path = Channel
+        .fromPath( final_params.confindr_db_path, checkIfExists: true )
+        .ifEmpty { error "Cannot find specified confindr db at: ${final_params.confindr_db_path}" }
+
+
+    QC(reads_ch, confindr_db_path)
 }
 
 // Messages on completion 
