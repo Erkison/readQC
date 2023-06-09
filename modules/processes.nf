@@ -1,7 +1,7 @@
 process FASTP {
     tag "Fastp on $sample_id"
 
-    label 'small_resource_req'
+    label 'medium_resource_req'
 
     publishDir "${params.output_dir}/fastp", 
         mode: 'copy',
@@ -36,7 +36,7 @@ process FASTP {
 process FASTQC {
     tag "FastQC on $sample_id"
 
-    label 'small_resource_req'
+    label 'medium_resource_req'
 
     publishDir "${params.output_dir}/fastqc/",
         pattern: "${sample_id}_fastqc_outputs",
@@ -114,6 +114,8 @@ process CONTAMINATION_CHECK {
 process QUALIFYR {
     tag "Qualifyr on $sample_id"
 
+    label 'small_resource_req'
+
     publishDir "${params.output_dir}/trimmed_reads/pass",
         mode: 'copy',
         pattern: 'trimmed_reads/pass/*',
@@ -174,6 +176,8 @@ process QUALIFYR {
 
 process QUALIFYR_REPORT {
     tag { 'qualifyr report' }
+
+    label 'small_resource_req'
 
     publishDir "${params.output_dir}/qualifyr",
         mode: 'copy',
