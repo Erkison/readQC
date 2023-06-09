@@ -28,9 +28,11 @@ workflow {
     confindr_db_path = Channel
         .fromPath( final_params.confindr_db_path, checkIfExists: true )
         .ifEmpty { error "Cannot find specified confindr db at: ${final_params.confindr_db_path}" }
+    qc_conditions = Channel
+        .fromPath( final_params.qc_conditions, checkIfExists: true )
+        .ifEmpty { error "Cannot find specified qc_conditions yaml file at: ${final_params.qc_conditions}" }
 
-
-    QC(reads_ch, confindr_db_path)
+    QC(reads_ch, confindr_db_path, qc_conditions, version)
 }
 
 // Messages on completion 

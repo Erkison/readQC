@@ -9,6 +9,8 @@ def default_params(){
     params.reads = false
     params.confindr_db_path = false
     params.output_dir = false
+    params.qc_conditions = false
+
     return params
 }
 
@@ -20,6 +22,12 @@ def check_params(Map params) {
      
     // set up output directory
     final_params.output_dir = check_mandatory_parameter(params, 'output_dir') - ~/\/$/
+
+    // check other mandatory params
+    final_params.confindr_db_path = check_mandatory_parameter(params, 'confindr_db_path')
+
+    final_params.qc_conditions = check_mandatory_parameter(params, 'qc_conditions')
+
       
     return final_params
 }

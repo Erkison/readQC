@@ -8,6 +8,7 @@ def help_message() {
          --reads                        Query fastq.gz file of sequences you wish to supply as input (e.g., "/data/*{R,_}{1,2}.fastq.gz")
          --output_dir                   Output directory to place output files 
          --confindr_db_path             Path to downloaded confindr database dir
+         --qc_conditions                Path to a yaml file specifying QC cutoffs (provided)
 
         Optional arguments:
          --help                         This usage statement

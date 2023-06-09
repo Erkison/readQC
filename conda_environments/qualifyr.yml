@@ -4,9 +4,6 @@ channels:
   - defaults
   - bioconda
 dependencies:
-  - bioconda::fastqc=0.11.8
-  - bioconda::multiqc=1.14
-  - bioconda::fastp=0.22.0
   - pip:
     - qualifyr==1.4.4
-
+    - pyyaml==5.4.1
