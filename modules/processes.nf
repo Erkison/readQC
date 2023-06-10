@@ -5,7 +5,7 @@ process FASTP {
 
     publishDir "${params.output_dir}/fastp", 
         mode: 'copy',
-        pattern: "*.fastp.*"
+        pattern: "*.fastp.html"
 
     input:
         tuple val(sample_id), path(reads)
@@ -25,7 +25,7 @@ process FASTP {
     # run fastp
     fastp \$INPUT_READS \$OUTPUT_READS \\
         --cut_front --cut_tail \\
-        --cut_mean_quality 30 \\
+        --cut_mean_quality 20 \\
         --length_required  50 \\
         --thread $task.cpus \\
         --json ${sample_id}.fastp.json \\
@@ -38,9 +38,9 @@ process FASTQC {
 
     label 'medium_resource_req'
 
-    publishDir "${params.output_dir}/fastqc/",
-        pattern: "${sample_id}_fastqc_outputs",
-        mode: 'copy'
+    // publishDir "${params.output_dir}/fastqc/",
+    //     pattern: "${sample_id}_fastqc_outputs",
+    //     mode: 'copy'
 
     input:
     tuple(val(sample_id), path(reads))
