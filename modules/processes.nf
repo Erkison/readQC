@@ -33,6 +33,46 @@ process FASTP {
     """
 }
 
+process CHECK_TRIMMED_FASTQ_SIZE {
+    tag { sample_id }
+    
+    input:
+    tuple(val(sample_id), path(reads))
+
+    output:
+    tuple(val(sample_id), stdout)
+
+    script:
+    """
+    size=\$(stat -Lc %s ${reads[0]} 2>/dev/null |  awk '{printf "%f", \$1/1000000}')
+    # if stat failed (on MacOS), use MacOS stat
+    if [ "\$size" == "" ]; then
+      size=\$(stat -Lf%z ${reads[0]} 2>/dev/null |  awk '{printf "%f", \$1/1000000}')
+    fi
+    echo \$size
+    """
+}
+
+process WRITE_OUT_EXCLUDED_READS {
+    tag "$sample_id"
+
+    publishDir "${params.output_dir}/trimmed_reads/failure/",
+        mode: 'move'
+
+    input:
+    tuple(val(sample_id), path(reads))
+
+    output:
+    path("too_small_size_post_trimming/*.trim.fastq.gz")
+
+
+    script:
+    """
+    mkdir too_small_size_post_trimming
+    cp ${reads} too_small_size_post_trimming
+    """
+}
+
 process FASTQC {
     tag "FastQC on $sample_id"
 
@@ -142,11 +182,9 @@ process QUALIFYR {
 
     output:
     path('trimmed_reads/**/*')
-    path('qualifyr/warn_and_fail_reports/*'), optional: true
     path("${sample_id}.qualifyr.json"), emit: json_files
 
     """
-    mkdir -p qualifyr/warn_and_fail_reports
     result=`qualifyr check -y ${qc_conditions_yml} -f ${fastqc_reports} -c ${confindr_report} -s ${sample_id} 2> ERR`
     return_code=\$?
     if [[ \$return_code -ne 0 ]]; then
@@ -163,9 +201,6 @@ process QUALIFYR {
         mkdir -p trimmed_reads/\${qc_level}
         mv ${reads} trimmed_reads/\${qc_level}/
 
-        if [[ \$result != "PASS" ]]; then
-            mv ERR qualifyr/warn_and_fail_reports/${sample_id}_\${qc_level}_qc_result.tsv
-        fi
     fi
 
     # make json file

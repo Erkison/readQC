@@ -10,6 +10,7 @@ def default_params(){
     params.confindr_db_path = false
     params.output_dir = false
     params.qc_conditions = false
+    params.posttrim_file_size_check = 5 // MB; exclude trimmed fastqs less than this cutoff
 
     return params
 }

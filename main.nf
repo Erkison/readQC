@@ -32,7 +32,7 @@ workflow {
         .fromPath( final_params.qc_conditions, checkIfExists: true )
         .ifEmpty { error "Cannot find specified qc_conditions yaml file at: ${final_params.qc_conditions}" }
 
-    QC(reads_ch, confindr_db_path, qc_conditions, version)
+    QC(reads_ch, confindr_db_path, qc_conditions, final_params.posttrim_file_size_check, version)
 }
 
 // Messages on completion 

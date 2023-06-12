@@ -8,37 +8,37 @@ fastqc:
       condition_type: eq
       condition_value: FAIL
   'Per base sequence quality':
-      failure:
-        condition_type: eq
-        condition_value: FAIL
+    failure:
+      condition_type: eq
+      condition_value: FAIL
   'Per sequence quality scores':
-      failure:
-        condition_type: eq
-        condition_value: FAIL
+    failure:
+      condition_type: eq
+      condition_value: FAIL
   'Per sequence GC content':
-      warning:
-        condition_type: eq
-        condition_value: FAIL
+    warning:
+      condition_type: eq
+      condition_value: FAIL
   'Per base N content':
-      warning:
-        condition_type: eq
-        condition_value: FAIL
+    warning:
+      condition_type: eq
+      condition_value: FAIL
   'Sequence Length Distribution':
-      failure:
-        condition_type: eq
-        condition_value: FAIL
+    failure:
+      condition_type: eq
+      condition_value: FAIL
   'Sequence Duplication Levels':
-      warning:
-        condition_type: eq
-        condition_value: FAIL
+    warning:
+      condition_type: eq
+      condition_value: FAIL
   'Overrepresented sequences':
-      failure:
-        condition_type: eq
-        condition_value: FAIL
+    warning:
+      condition_type: eq
+      condition_value: FAIL
   'Adapter Content':
-      failure:
-        condition_type: eq
-        condition_value: FAIL
+    failure:
+      condition_type: eq
+      condition_value: FAIL
 confindr:
   'contam_status':
     failure:
