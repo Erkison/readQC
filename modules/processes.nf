@@ -157,23 +157,18 @@ process QUALIFYR {
     label 'small_resource_req'
 
     publishDir "${params.output_dir}/trimmed_reads/pass",
-        mode: 'copy',
+        mode: 'move',
         pattern: 'trimmed_reads/pass/*',
         saveAs: { file -> file.split('\\/')[-1] }
 
     publishDir "${params.output_dir}/trimmed_reads/warning",
-        mode: 'copy',
+        mode: 'move',
         pattern: 'trimmed_reads/warning/*',
         saveAs: { file -> file.split('\\/')[-1] }
     
     publishDir "${params.output_dir}/trimmed_reads/failure",
-        mode: 'copy',
+        mode: 'move',
         pattern: 'trimmed_reads/failure/*',
-        saveAs: { file -> file.split('\\/')[-1] }
-
-    publishDir "${params.output_dir}/qualifyr/warn_and_fail_reports/",
-        mode: 'copy',
-        pattern: 'qualifyr/warn_and_fail_reports/*',
         saveAs: { file -> file.split('\\/')[-1] }
 
     input:
