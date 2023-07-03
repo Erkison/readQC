@@ -156,18 +156,22 @@ process QUALIFYR {
 
     label 'small_resource_req'
 
+    publishDir "${params.output_dir}/qualifyr/",
+        mode: 'copy',
+        pattern: '*_sample_ids.txt'
+
     publishDir "${params.output_dir}/trimmed_reads/pass",
-        mode: 'move',
+        mode: 'copy',
         pattern: 'trimmed_reads/pass/*',
         saveAs: { file -> file.split('\\/')[-1] }
 
     publishDir "${params.output_dir}/trimmed_reads/warning",
-        mode: 'move',
+        mode: 'copy',
         pattern: 'trimmed_reads/warning/*',
         saveAs: { file -> file.split('\\/')[-1] }
     
     publishDir "${params.output_dir}/trimmed_reads/failure",
-        mode: 'move',
+        mode: 'copy',
         pattern: 'trimmed_reads/failure/*',
         saveAs: { file -> file.split('\\/')[-1] }
 
@@ -177,6 +181,7 @@ process QUALIFYR {
 
     output:
     path('trimmed_reads/**/*')
+    path('*_sample_ids.txt')
     path("${sample_id}.qualifyr.json"), emit: json_files
 
     """
@@ -187,10 +192,13 @@ process QUALIFYR {
     else
         if [[ \$result == "PASS" ]]; then
             qc_level="pass"
+            echo ${sample_id} >> pass_sample_ids.txt
         elif [[ \$result == "WARNING" ]]; then
             qc_level="warning"
+            echo ${sample_id} >> pass_sample_ids.txt
         elif [[ \$result == "FAILURE" ]]; then
             qc_level="failure"
+            echo ${sample_id} >> fail_sample_ids.txt
         fi
 
         mkdir -p trimmed_reads/\${qc_level}
