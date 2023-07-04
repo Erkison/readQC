@@ -11,16 +11,16 @@ process FASTP {
         tuple val(sample_id), path(reads)
 
     output:
-        tuple(val(sample_id),  path("*.trim.fastq.gz"), emit: trimmed_fastqs)
+        tuple(val(sample_id),  path("*_trimmed_*.fastq.gz"), emit: trimmed_fastqs)
         path("*.fastp.*")
-        path("*.fail.fastq.gz")
+        path("*failed_*.fastq.gz")
 
     script:
     """
     [ ! -f  ${sample_id}_1.fastq.gz ] && ln -s ${reads[0]} ${sample_id}_1.fastq.gz
     [ ! -f  ${sample_id}_2.fastq.gz ] && ln -s ${reads[1]} ${sample_id}_2.fastq.gz
     INPUT_READS='--in1 ${sample_id}_1.fastq.gz --in2 ${sample_id}_2.fastq.gz'
-    OUTPUT_READS='--out1 ${sample_id}_1.trim.fastq.gz --out2 ${sample_id}_2.trim.fastq.gz --unpaired1 ${sample_id}_1.fail.fastq.gz --unpaired2 ${sample_id}_2.fail.fastq.gz'
+    OUTPUT_READS='--out1 ${sample_id}_trimmed_1.fastq.gz --out2 ${sample_id}_trimmed_2.fastq.gz --unpaired1 ${sample_id}_failed_1.fastq.gz --unpaired2 ${sample_id}_failed_2.fastq.gz'
 
     # run fastp
     fastp \$INPUT_READS \$OUTPUT_READS \\
@@ -63,7 +63,7 @@ process WRITE_OUT_EXCLUDED_READS {
     tuple(val(sample_id), path(reads))
 
     output:
-    path("too_small_size_post_trimming/*.trim.fastq.gz")
+    path("too_small_size_post_trimming/*_trimmed_*.fastq.gz")
 
 
     script:
@@ -93,9 +93,9 @@ process FASTQC {
     script:
     """
     mkdir ${sample_id}_fastqc_outputs
-    fastqc --quiet --extract --threads $task.cpus *.trim.fastq.gz --outdir ${sample_id}_fastqc_outputs
-    cp ${sample_id}_fastqc_outputs/${sample_id}_1.trim_fastqc/summary.txt ${sample_id}_1_fastqc.txt
-    cp ${sample_id}_fastqc_outputs/${sample_id}_2.trim_fastqc/summary.txt ${sample_id}_2_fastqc.txt
+    fastqc --quiet --extract --threads $task.cpus *_trimmed_*.fastq.gz --outdir ${sample_id}_fastqc_outputs
+    cp ${sample_id}_fastqc_outputs/${sample_id}_trimmed_1_fastqc/summary.txt ${sample_id}_1_fastqc.txt
+    cp ${sample_id}_fastqc_outputs/${sample_id}_trimmed_2_fastqc/summary.txt ${sample_id}_2_fastqc.txt
     """
 }
 
