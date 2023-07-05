@@ -24,9 +24,6 @@ process FASTP {
 
     # run fastp
     fastp \$INPUT_READS \$OUTPUT_READS \\
-        --cut_front --cut_tail \\
-        --cut_mean_quality 20 \\
-        --length_required  50 \\
         --thread $task.cpus \\
         --json ${sample_id}.fastp.json \\
         --html ${sample_id}.fastp.html
